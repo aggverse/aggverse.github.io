@@ -258,6 +258,12 @@ button,
   background: rgba(212, 175, 55, 0.1);
 }
 
+#bookmark-novel-btn.active,
+#bookmark-chapter-nav-btn.active,
+#bookmark-chapter-btn.active {
+  color: var(--primary);
+}
+
 .setting-row {
   display: flex;
   align-items: center;
@@ -479,57 +485,91 @@ body.immersive {
     line-height: 1.6;
   }
 
-  .reader,
-  .container {
-    padding: 18px 12px;
-    max-width: 100%;
+  .floating-btn {
+    width: 48px;
+    height: 48px;
+    bottom: 18px;
+    left: 16px;
   }
+}
 
-  #reader,
-  .reader {
-    font-size: 1.35rem;
-  }
+.floating-btn {
+  position: fixed;
+  bottom: 16px;
+  left: 16px;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: rgba(15, 17, 21, 0.95);
+  color: var(--text-body);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  z-index: 1002;
+  cursor: pointer;
+}
 
-  #reader h1,
-  .reader h1 {
-    font-size: 2.3rem;
-    line-height: 1.25;
-    margin-bottom: 20px;
-  }
+#favorites-panel {
+  position: fixed;
+  bottom: 74px;
+  left: 12px;
+  width: 280px;
+  max-height: 60vh;
+  background: rgba(15, 17, 21, 0.92);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px;
+  overflow-y: auto;
+  z-index: 1001;
+}
 
-  .content p {
-    font-size: 1.3rem;
-    line-height: 1.85;
-  }
+#favorites-panel.hidden {
+  display: none;
+}
 
-  .navbar {
-    padding: 10px 12px;
-    gap: 8px;
-  }
+#favorites-panel h3 {
+  margin: 0 0 8px;
+  font-size: 1rem;
+  color: var(--primary);
+}
 
-  .nav-left {
-    gap: 8px;
-  }
+#favorites-panel .favorite-entry {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
 
-  .nav-btn,
-  .nav-current {
-    padding: 10px 12px;
-    font-size: 1.05rem;
-  }
+#favorites-panel a {
+  font-size: 0.9rem;
+  color: var(--text-body);
+  text-decoration: none;
+}
 
-  #settings-panel {
-    right: 6px;
-    top: 55px;
-    width: 96%;
-  }
+#favorites-panel .favorite-remove-btn {
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-body);
+  cursor: pointer;
+  border-radius: 4px;
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  line-height: 1;
+}
 
-  .chapter-nav {
-    flex-direction: column;
-    gap: 12px;
-  }
+#favorites-panel .favorite-remove-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
 
-  .chapter-nav a {
-    font-size: 1.2rem;
-  }
+#favorites-panel .no-favorites {
+  font-size: 0.85rem;
+  color: var(--muted);
 }
 

@@ -126,6 +126,7 @@ chapters.forEach((ch, i) => {
   </div>
 
   <div class="nav-right">
+    <button id="bookmark-chapter-nav-btn" class="icon-btn" data-novel-title="${meta.title}" data-chapter-title="${ch.title}" aria-label="Bookmark chapter">☆</button>
     <button id="settings-btn" class="icon-btn">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
         <circle cx="12" cy="12" r="3"/>
@@ -144,7 +145,8 @@ chapters.forEach((ch, i) => {
     <span id="font-indicator">18px</span>
   </div>
 
-  <button id="immersive-btn" onclick="toggleImmersive()">Immersive</button>
+  <button id="bookmark-chapter-btn" class="icon-btn" data-novel-title="${meta.title}" data-chapter-title="${ch.title}">Bookmark chapter</button>
+  <button id="immersive-btn" class="icon-btn">Immersive</button>
 
 </div>
 
@@ -191,6 +193,10 @@ ${ch.content}
     <span class="nav-current">${meta.title}</span>
   </div>
 
+  <div class="nav-right">
+    <button id="bookmark-novel-btn" class="icon-btn" data-novel-title="${meta.title}" aria-label="Bookmark novel">☆</button>
+  </div>
+
 </nav>
 
 <main class="container">
@@ -229,11 +235,10 @@ if (last && last.includes("novels/" + currentNovel + "/")) {
   document.getElementById("continue-reading").appendChild(btn);
 }
 </script>
-
+<script src="../../assets/reader.js" defer></script>
 </body>
 </html>
 `;
-
   fs.writeFileSync(path.join(outPath, "index.html"), indexHTML);
 }
 
@@ -289,6 +294,12 @@ function buildHomepage() {
 ${cards}
 </main>
 
+<div id="favorites-panel" class="hidden"></div>
+<button id="favorites-toggle-btn" class="floating-btn" aria-label="Open favorites">
+  ☰
+</button>
+
+<script src="assets/reader.js" defer></script>
 </body>
 </html>
 `;

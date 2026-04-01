@@ -14,6 +14,10 @@
     <span class="nav-current">Lumina</span>
   </div>
 
+  <div class="nav-right">
+    <button id="bookmark-novel-btn" class="icon-btn" data-novel-title="Lumina" aria-label="Bookmark novel">☆</button>
+  </div>
+
 </nav>
 
 <main class="container">
@@ -52,6 +56,6 @@ if (last && last.includes("novels/" + currentNovel + "/")) {
   document.getElementById("continue-reading").appendChild(btn);
 }
 </script>
-
+<script src="../../assets/reader.js" defer></script>
 </body>
 </html>
