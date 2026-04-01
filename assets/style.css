@@ -1,62 +1,138 @@
-body {
-  margin: 0;
-  background: #0f1115;
-  color: #e8e6e3;
-  font-family: 'Georgia', serif;
+﻿/*
+  Cleaned styles for aggverse.github.io
+  - grouped sections
+  - removed duplicates
+  - consistent spacing
+  - easier override order
+*/
+
+/* Base */
+:root {
+  --bg: #0f1115;
+  --bg-dark: #111;
+  --bg-alt: #151821;
+  --border: #2a2d34;
+  --text: #e8e6e3;
+  --muted: #888;
+  --primary: #d4af37;
+  --interactive: #aaa;
+  --accent: #d4af37;
+  --text-body: #e8e6e3;
 }
 
-/* NAVBAR */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text-body);
+  font-family: 'Georgia', serif;
+  transition: background 0.3s ease;
+}
+
+a {
+  color: inherit;
+}
+
+button,
+.icon-btn,
+.nav-btn {
+  font: inherit;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* Navigation */
 .navbar {
   position: sticky;
   top: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   background: rgba(15,17,21,0.9);
-  padding: 15px 30px;
-  border-bottom: 1px solid #2a2d34;
+  border-bottom: 1px solid var(--border);
+  padding: 10px 20px;
+  z-index: 500;
+  transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
 .logo {
-  color: #d4af37;
+  color: var(--primary);
   text-decoration: none;
   font-size: 1.2rem;
 }
 
-/* LAYOUT */
-.container {
+.nav-left {
+  display: flex;
+  gap: 10px;
+}
+
+.nav-btn,
+.nav-current {
+  text-decoration: none;
+  color: var(--interactive);
+  padding: 5px 10px;
+  border: 1px solid transparent;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.nav-btn:hover {
+  color: var(--primary);
+  border-color: var(--border);
+}
+
+.nav-btn:last-child,
+.nav-current,
+.nav-btn.active {
+  color: var(--primary);
+}
+
+.icon-btn {
+  background: transparent;
+  border: none;
+  color: var(--interactive);
+  cursor: pointer;
+  padding: 5px;
+  transition: color 0.2s ease;
+}
+
+.icon-btn:hover {
+  color: var(--primary);
+}
+
+/* Reader shell */
+.container,
+.reader {
   max-width: 800px;
-  margin: auto;
+  margin: 0 auto;
   padding: 40px 20px;
 }
 
-.title {
-  color: #d4af37;
-}
-
-/* NOVEL CARDS */
-.novel-card {
-  display: block;
-  padding: 20px;
-  margin-bottom: 20px;
-  border: 1px solid #2a2d34;
-  text-decoration: none;
-  color: inherit;
-  transition: 0.3s;
-}
-
-.novel-card:hover {
-  border-color: #d4af37;
-  background: #151821;
-}
-
-/* READER */
 .reader {
-  max-width: 700px;
-  margin: auto;
-  padding: 60px 20px;
   line-height: 1.8;
+  animation: fadeIn 0.5s ease;
+  transition: max-width 0.3s ease;
 }
 
+.reader.wide {
+  max-width: 1000px;
+}
+
+#reader {
+  font-size: clamp(16px, 4vw, 20px);
+  transition: font-size 0.2s ease, max-width 0.3s ease;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+#reader h1,
 .reader h1 {
-  color: #d4af37;
+  color: var(--primary);
   margin-bottom: 30px;
 }
 
@@ -65,122 +141,109 @@ body {
   font-size: 1.05rem;
 }
 
-/* CHAPTER NAV */
-.chapter-nav {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 50px;
-}
-
-.chapter-nav a {
-  color: #d4af37;
-  text-decoration: none;
-}
-
-/* PROGRESS BAR */
-#progress-bar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 3px;
-  background: #d4af37;
-  width: 0%;
-  z-index: 1000;
-}
-
-/* SETTINGS PANEL */
-#settings-panel {
-  position: fixed;
-  top: 60px;
-  right: 20px;
-  background: #151821;
-  border: 1px solid #2a2d34;
-  padding: 10px;
-}
-
-.hidden {
-  display: none;
-}
-
-/* CHAPTER LINKS */
-.chapter-link {
+/* Cards */
+.novel-card,
+.chapter-card {
   display: block;
-  padding: 10px 0;
-  color: #d4af37;
+  padding: 20px;
+  margin-bottom: 16px;
+  border: 1px solid var(--border);
   text-decoration: none;
+  color: inherit;
+  transition: border-color 0.3s ease, background 0.3s ease;
 }
 
-/* BUTTON */
-button {
-  background: none;
-  border: 1px solid #d4af37;
-  color: #d4af37;
-  padding: 5px 10px;
-  margin: 3px;
-  cursor: pointer;
+.chapter-card {
+  padding: 15px 20px;
+  margin: 10px 0;
 }
 
-/* NOVEL CARD */
-.novel-card small {
+.novel-card:hover,
+.chapter-card:hover {
+  border-color: var(--accent);
+  background: var(--bg-alt);
+}
+
+.chapter-title,
+.title {
+  color: var(--primary);
+}
+
+.novel-card small,
+.word-count {
+  color: var(--muted);
   display: block;
   margin-top: 5px;
-  color: #888;
-}
-
-/* WORD COUNT */
-.word-count {
-  color: #888;
-  margin-bottom: 20px;
   font-size: 0.9rem;
 }
 
+.chapter-link {
+  display: block;
+  padding: 10px 0;
+  color: var(--primary);
+  text-decoration: none;
+}
+
+/* Chapter nav */
 .chapter-nav {
   display: flex;
   justify-content: space-between;
   margin-top: 40px;
 }
 
-.chapter-card {
-  display: block;
-  padding: 15px 20px;
-  margin: 10px 0;
-  border: 1px solid #2a2d34;
+.chapter-nav a {
+  color: var(--primary);
   text-decoration: none;
-  color: inherit;
-  transition: 0.3s;
 }
 
-.chapter-card:hover {
-  border-color: #d4af37;
-  background: #151821;
+/* Progress bar */
+#progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: var(--primary);
+  width: 0;
+  z-index: 1000;
 }
 
-.chapter-title {
-  color: #d4af37;
-  font-size: 1.1rem;
+/* Settings panel */
+#settings-panel {
+  position: fixed;
+  top: 60px;
+  right: 20px;
+  background: var(--bg-dark);
+  border: 1px solid var(--border);
+  padding: 10px;
+  z-index: 1000;
+  min-width: 180px;
+  transition: opacity 0.2s ease;
 }
 
-.reader {
-  animation: fadeIn 0.5s ease;
+#settings-panel.hidden {
+  opacity: 0;
+  pointer-events: none;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
+#settings-panel button {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--interactive);
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease;
+  margin: 0 2px 3px 0;
 }
 
-.reader {
-  max-width: 700px;
-  margin: auto;
+#settings-panel button:hover {
+  border-color: var(--accent);
+  color: #fff;
 }
 
-.reader.wide {
-  max-width: 1000px;
-}
-
-body.immersive .navbar,
-body.immersive #settings-btn {
-  display: none;
+#settings-panel button.active {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(212, 175, 55, 0.1);
 }
 
 .setting-row {
@@ -191,110 +254,19 @@ body.immersive #settings-btn {
 }
 
 #font-indicator {
-  color: #d4af37;
+  color: var(--primary);
   font-size: 0.9rem;
   min-width: 40px;
   text-align: center;
-}
-
-.hidden {
-  display: none;
-}
-
-#settings-panel button {
-  background: transparent;
-  border: 1px solid #2a2d34;
-  color: #aaa;
-  padding: 5px 10px;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-#settings-panel button:hover {
-  border-color: #d4af37;
-  color: #fff;
-}
-
-#settings-panel button.active {
-  border-color: #d4af37;
-  color: #d4af37;
-  background: rgba(212, 175, 55, 0.1);
-}
-
-#settings-panel {
-  position: fixed;
-  top: 60px;
-  right: 20px;
-  background: #111;
-  border: 1px solid #2a2d34;
-  padding: 10px;
-  z-index: 1000;
-}
-
-#settings-panel {
-  transition: opacity 0.2s ease;
-}
-
-#settings-panel.hidden {
-  opacity: 0;
-  pointer-events: none;
-}
-
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 20px;
-  border-bottom: 1px solid #2a2d34;
-}
-
-.nav-left {
-  display: flex;
-  gap: 10px;
-}
-
-.nav-btn {
-  text-decoration: none;
-  color: #aaa;
-  padding: 5px 10px;
-  border: 1px solid transparent;
-  transition: 0.2s;
-}
-
-.nav-btn:hover {
-  color: #d4af37;
-  border-color: #2a2d34;
-}
-
-.nav-btn:last-child {
-  color: #d4af37;
-}
-
-.nav-current {
-  color: #d4af37;
-  padding: 5px 10px;
-}
-
-.icon-btn {
-  background: transparent;
-  border: none;
-  color: #aaa;
-  cursor: pointer;
-  padding: 5px;
-  transition: 0.2s;
-}
-
-.icon-btn:hover {
-  color: #d4af37;
 }
 
 #exit-immersive {
   position: fixed;
   bottom: 20px;
   right: 20px;
-  background: #111;
-  border: 1px solid #d4af37;
-  color: #d4af37;
+  background: var(--bg-dark);
+  border: 1px solid var(--primary);
+  color: var(--primary);
   padding: 8px 12px;
   border-radius: 6px;
   display: none;
@@ -302,4 +274,53 @@ body.immersive #settings-btn {
 
 body.immersive #exit-immersive {
   display: block;
+}
+
+body.immersive .navbar {
+  opacity: 0;
+  transform: translateY(-10px);
+  pointer-events: none;
+}
+
+body.immersive #reader {
+  max-width: 900px;
+}
+
+body.immersive {
+  background: #0a0a0a;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .reader,
+  .container {
+    padding: 15px;
+    max-width: 100%;
+  }
+
+  .navbar {
+    padding: 8px 12px;
+  }
+
+  .nav-btn {
+    font-size: 14px;
+  }
+
+  #settings-panel {
+    right: 10px;
+    top: 50px;
+    width: 90%;
+  }
 }
