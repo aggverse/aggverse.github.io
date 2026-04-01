@@ -119,10 +119,6 @@ button,
   transition: max-width 0.3s ease;
 }
 
-.reader.wide {
-  max-width: 1000px;
-}
-
 @media (prefers-reduced-motion: reduce) {
   .reader {
     animation: none;

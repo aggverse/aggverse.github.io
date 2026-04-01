@@ -10,14 +10,14 @@
 
   <div class="nav-left">
     <a href="../../index.html" class="nav-btn">Home</a>
-    <span class="nav-current">Lumina</span>
+    <span class="nav-current">Astral</span>
   </div>
 
 </nav>
 
 <main class="container">
-<img class="novel-cover" src="luminacover.jpg" alt="Lumina cover" />
-<h1>Lumina</h1>
+<img class="novel-cover" src="astralcover.jpg" alt="Astral cover" />
+<h1>Astral</h1>
 <p><strong>Genre:</strong> Fantasy, Strategy</p>
 <p><strong>Description:</strong> A world where strategy shapes destiny.</p>
 <div id="continue-reading"></div>
@@ -39,7 +39,7 @@ fetch("chapters.json")
   });
 });
 
-const currentNovel = "novel-1";
+const currentNovel = "novel-2";
 const last = localStorage.getItem("lastChapter-" + currentNovel) || localStorage.getItem("lastChapter");
 
 if (last && last.includes("novels/" + currentNovel + "/")) {

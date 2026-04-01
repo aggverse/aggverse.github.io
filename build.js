@@ -143,7 +143,6 @@ chapters.forEach((ch, i) => {
     <span id="font-indicator">18px</span>
   </div>
 
-  <button id="width-btn" onclick="toggleWidth()">Width</button>
   <button id="immersive-btn" onclick="toggleImmersive()">Immersive</button>
 
 </div>
@@ -216,9 +215,10 @@ fetch("chapters.json")
   });
 });
 
-const last = localStorage.getItem("lastChapter");
+const currentNovel = "${novelName}";
+const last = localStorage.getItem("lastChapter-" + currentNovel) || localStorage.getItem("lastChapter");
 
-if (last) {
+if (last && last.includes("novels/" + currentNovel + "/")) {
   const btn = document.createElement("a");
   btn.href = last;
   btn.textContent = "Continue Reading";

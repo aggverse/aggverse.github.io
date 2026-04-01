@@ -1,10 +1,19 @@
 const SCROLL_KEY = `scroll-${location.pathname}`;
 const LAST_CHAPTER_KEY = "lastChapter";
 
+function getNovelKey() {
+  const match = location.pathname.match(/novels\/([^\/]+)/);
+  return match ? match[1] : null;
+}
+
+function getLastChapterStorageKey() {
+  const novel = getNovelKey();
+  return novel ? `${LAST_CHAPTER_KEY}-${novel}` : LAST_CHAPTER_KEY;
+}
+
 let fontSize = parseInt(localStorage.getItem("fontSize"), 10);
 if (!Number.isFinite(fontSize)) fontSize = 18;
 
-let isWide = localStorage.getItem("isWide") === "true";
 let isImmersive = localStorage.getItem("isImmersive") === "true";
 
 function updateProgressBar() {
@@ -45,19 +54,13 @@ function estimateReadingTime() {
 
 function applySettings() {
   const reader = document.getElementById("reader");
-  const widthBtn = document.getElementById("width-btn");
   const immersiveBtn = document.getElementById("immersive-btn");
-
-  if (widthBtn) {
-    widthBtn.classList.toggle("active", isWide);
-  }
 
   if (immersiveBtn) {
     immersiveBtn.classList.toggle("active", isImmersive);
   }
   if (reader) {
     reader.style.fontSize = `${fontSize}px`;
-    reader.classList.toggle("wide", isWide);
   }
 
   document.body.classList.toggle("immersive", isImmersive);
@@ -72,12 +75,6 @@ function changeFont(delta) {
 
   fontSize = Math.min(MAX, Math.max(MIN, fontSize + delta));
   localStorage.setItem("fontSize", fontSize);
-  applySettings();
-}
-
-function toggleWidth() {
-  isWide = !isWide;
-  localStorage.setItem("isWide", isWide);
   applySettings();
 }
 
@@ -129,7 +126,6 @@ function setupUI() {
 
   // Keep compatibility with inline onclick handlers for existing markup
   window.changeFont = changeFont;
-  window.toggleWidth = toggleWidth;
   window.toggleImmersive = toggleImmersive;
 }
 
@@ -146,7 +142,8 @@ window.addEventListener("load", () => {
   setupKeyboardNav();
   preloadNextChapter();
 
-  localStorage.setItem(LAST_CHAPTER_KEY, window.location.href);
+  const currentKey = getLastChapterStorageKey();
+  localStorage.setItem(currentKey, window.location.href);
 });
 
 document.addEventListener("DOMContentLoaded", () => {
