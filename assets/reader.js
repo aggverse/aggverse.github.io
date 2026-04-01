@@ -122,6 +122,7 @@ if (!Number.isFinite(fontSize)) fontSize = 18;
 let isImmersive = localStorage.getItem("isImmersive") === "true";
 let isNovelFavorited = false;
 let isChapterFavorited = false;
+let commentsVisible = false;
 let undoTimeoutId = null;
 let lastRemovedFavorites = null;
 
@@ -136,6 +137,29 @@ function updateProgressBar() {
   const percent = (scrollTop / height) * 100;
 
   progress.style.width = `${Math.min(100, Math.max(0, percent))}%`;
+}
+
+function updateCommentsVisibility() {
+  const comments = document.querySelector(".comments-section");
+  if (!comments) return;
+
+  if (isImmersive) {
+    comments.classList.add("hidden");
+    commentsVisible = false;
+    const toggle = document.getElementById("comments-toggle-btn");
+    if (toggle) toggle.classList.remove("active");
+    if (toggle) toggle.textContent = "Show comments";
+    return;
+  }
+
+  const shouldShow = commentsVisible;
+  comments.classList.toggle("hidden", !shouldShow);
+
+  const toggle = document.getElementById("comments-toggle-btn");
+  if (toggle) {
+    toggle.textContent = shouldShow ? "Hide comments" : "Show comments";
+    toggle.classList.toggle("active", shouldShow);
+  }
 }
 
 function saveScrollPosition() {
@@ -329,7 +353,8 @@ function preloadNextChapter() {
 function setupUI() {
   const settingsBtn = document.getElementById("settings-btn");
   if (settingsBtn) {
-    settingsBtn.addEventListener("click", () => {
+    settingsBtn.addEventListener("click", (e) => {
+      e.stopPropagation(); // prevent global click listener from hiding panel immediately
       const panel = document.getElementById("settings-panel");
       if (panel) panel.classList.toggle("hidden");
     });
@@ -373,6 +398,19 @@ function setupUI() {
     chapterNavBtn.addEventListener("click", toggleBookmarkChapter);
   }
 
+  const commentsToggleBtn = document.getElementById("comments-toggle-btn");
+  if (commentsToggleBtn) {
+    commentsToggleBtn.addEventListener("click", () => {
+      commentsVisible = !commentsVisible;
+      updateCommentsVisibility();
+    });
+  }
+
+  const immersiveBtn = document.getElementById("immersive-btn");
+  if (immersiveBtn) {
+    immersiveBtn.addEventListener("click", toggleImmersive);
+  }
+
   const chapterBookmarkBtn = document.getElementById("bookmark-chapter-btn");
   if (chapterBookmarkBtn) {
     chapterBookmarkBtn.addEventListener("click", toggleBookmarkChapter);
@@ -399,6 +437,7 @@ window.addEventListener("load", () => {
   setupKeyboardNav();
   setupUI();
   preloadNextChapter();
+  updateCommentsVisibility();
 
   const currentKey = getLastChapterStorageKey();
   if (document.getElementById("reader") && currentKey) {
@@ -557,18 +596,6 @@ function renderFavoritesPanel() {
 }
 
 
-
-document.addEventListener("DOMContentLoaded", () => {
-  const btn = document.getElementById("settings-btn");
-  const panel = document.getElementById("settings-panel");
-
-  if (btn && panel) {
-    btn.addEventListener("click", (e) => {
-      e.stopPropagation(); // prevent outside click interference
-      panel.classList.toggle("hidden");
-    });
-  }
-});
 
 let uiVisible = false;
 

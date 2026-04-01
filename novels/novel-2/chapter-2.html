@@ -40,7 +40,7 @@
     <span id="font-indicator">18px</span>
   </div>
 
-  <button id="bookmark-chapter-btn" class="icon-btn" data-novel-title="Astral" data-chapter-title="Chapter 2: Wind Rises">Bookmark chapter</button>
+  <button id="comments-toggle-btn" class="icon-btn">Show comments</button>
   <button id="immersive-btn" class="icon-btn">Immersive</button>
 
 </div>
@@ -61,5 +61,26 @@
 
 </main>
 
+<section id="comments" class="comments-section">
+  <h2>Comments</h2>
+  <div id="disqus_thread"></div>
+  <script>
+    var disqus_config = function () {
+      this.page.url = "https://aggverse.github.io/novels/novel-2/chapter-2.html";
+      this.page.identifier = "novel-novel-2-chapter-chapter-2";
+      this.page.title = "Astral - Chapter 2: Wind Rises";
+    };
+
+    (function() {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://aggverse.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+<script src="../../assets/reader.js" defer></script>
 </body>
 </html>

@@ -145,7 +145,7 @@ chapters.forEach((ch, i) => {
     <span id="font-indicator">18px</span>
   </div>
 
-  <button id="bookmark-chapter-btn" class="icon-btn" data-novel-title="${meta.title}" data-chapter-title="${ch.title}">Bookmark chapter</button>
+  <button id="comments-toggle-btn" class="icon-btn">Show comments</button>
   <button id="immersive-btn" class="icon-btn">Immersive</button>
 
 </div>
@@ -163,83 +163,33 @@ ${ch.content}
 
 </main>
 
+<section id="comments" class="comments-section">
+  <h2>Comments</h2>
+  <div id="disqus_thread"></div>
+  <script>
+    var disqus_config = function () {
+      this.page.url = "https://aggverse.github.io/novels/${novelName}/${ch.file}";
+      this.page.identifier = "novel-${novelName}-chapter-${ch.file.replace('.html','')}";
+      this.page.title = "${meta.title} - ${ch.title}";
+    };
+
+    (function() {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://aggverse.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+<script src="../../assets/reader.js" defer></script>
 </body>
 </html>
 `;
 
   fs.writeFileSync(path.join(outPath, ch.file), fullHTML);
 });
-
-  // chapters.json
-  fs.writeFileSync(
-    path.join(outPath, "chapters.json"),
-    JSON.stringify(chapters, null, 2)
-  );
-
-  // novel index
-  const indexHTML = `
-<!DOCTYPE html>
-<html>
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-<link rel="stylesheet" href="../../assets/style.css">
-</head>
-<body>
-
-<nav class="navbar">
-
-  <div class="nav-left">
-    <a href="../../index.html" class="nav-btn">Home</a>
-    <span class="nav-current">${meta.title}</span>
-  </div>
-
-  <div class="nav-right">
-    <button id="bookmark-novel-btn" class="icon-btn" data-novel-title="${meta.title}" aria-label="Bookmark novel">☆</button>
-  </div>
-
-</nav>
-
-<main class="container">
-${meta.cover ? `<img class="novel-cover" src="${meta.cover}" alt="${meta.title} cover" />` : ""}
-<h1>${meta.title}</h1>
-<p><strong>Genre:</strong> ${meta.genre}</p>
-<p><strong>Description:</strong> ${meta.description || "No description yet."}</p>
-<div id="continue-reading"></div>
-<div id="chapters"></div>
-</main>
-
-<script>
-fetch("chapters.json")
-.then(r => r.json())
-.then(data => {
-  const el = document.getElementById("chapters");
-  data.forEach(c => {
-     const a = document.createElement("a");
-    a.href = c.file;
-    a.className = "chapter-card";
-  
-    a.innerHTML = '<div class="chapter-title">' + c.title + '</div>';
-    el.appendChild(a);
-  });
-});
-
-const currentNovel = "${novelName}";
-const last = localStorage.getItem("lastChapter-" + currentNovel) || localStorage.getItem("lastChapter");
-
-if (last && last.includes("novels/" + currentNovel + "/")) {
-  const btn = document.createElement("a");
-  btn.href = last;
-  btn.textContent = "Continue Reading";
-  btn.className = "chapter-card";
-  
-  document.getElementById("continue-reading").appendChild(btn);
-}
-</script>
-<script src="../../assets/reader.js" defer></script>
-</body>
-</html>
-`;
-  fs.writeFileSync(path.join(outPath, "index.html"), indexHTML);
 }
 
 function buildHomepage() {

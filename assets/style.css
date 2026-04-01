@@ -573,3 +573,48 @@ body.immersive {
   color: var(--muted);
 }
 
+/* Disqus comments styling */
+.comments-section {
+  margin-top: 48px;
+  padding: 18px;
+  background: rgba(20, 24, 30, 0.96);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.38);
+  animation: fadeInUp 0.5s ease;
+  max-width: 100%;
+  position: relative;
+}
+
+body.immersive .comments-section {
+  display: none !important;
+}
+
+.comments-section h2 {
+  margin: 0 0 14px;
+  font-size: 1.18rem;
+  color: var(--primary);
+}
+
+.comments-section #disqus_thread {
+  min-height: 240px;
+}
+
+/* Only show Disqus when adsorbing at bottom by manual scroll (no JS needed in this scope) */
+.comments-section::before {
+  content: "“Comments appear after you finish reading in immersive mode.”";
+  display: none;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
