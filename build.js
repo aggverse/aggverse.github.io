@@ -95,16 +95,37 @@ chapters.forEach((ch, i) => {
 
 <div id="progress-bar"></div>
 
+<button id="exit-immersive">Exit</button>
+
 <nav class="navbar">
-<a href="index.html">← ${meta.title}</a>
-<button id="settings-btn">⚙️</button>
+
+  <div class="nav-left">
+    <a href="../../index.html" class="nav-btn">Home</a>
+    <a href="index.html" class="nav-btn">${meta.title}</a>
+  </div>
+
+  <div class="nav-right">
+    <button id="settings-btn" class="icon-btn">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <circle cx="12" cy="12" r="3"/>
+        <path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3h.1A1.7 1.7 0 0 0 10 3.1V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8v.1a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>
+      </svg>
+    </button>
+  </div>
+
 </nav>
 
 <div id="settings-panel" class="hidden">
-<button onclick="changeFont(1)">A+</button>
-<button onclick="changeFont(-1)">A-</button>
-<button onclick="toggleWidth()">Width</button>
-<button onclick="toggleImmersive()">Immersive</button>
+
+  <div class="setting-row">
+    <button onclick="changeFont(1)">A+</button>
+    <button onclick="changeFont(-1)">A-</button>
+    <span id="font-indicator">18px</span>
+  </div>
+
+  <button id="width-btn" onclick="toggleWidth()">Width</button>
+  <button id="immersive-btn" onclick="toggleImmersive()">Immersive</button>
+
 </div>
 
 <main id="reader" class="reader">
@@ -143,7 +164,12 @@ ${ch.content}
 <body>
 
 <nav class="navbar">
-<a href="../../index.html">← Back</a>
+
+  <div class="nav-left">
+    <a href="../../index.html" class="nav-btn">Home</a>
+    <span class="nav-current">${meta.title}</span>
+  </div>
+
 </nav>
 
 <main class="container">
