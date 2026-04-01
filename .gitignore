@@ -1,0 +1,10 @@
+# Ignore deployment scripts
+deploy.bat
+rollback.bat
+
+# Ignore node modules (important)
+node_modules/
+
+# Optional: system files
+.DS_Store
+Thumbs.db
