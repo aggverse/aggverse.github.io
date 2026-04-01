@@ -296,10 +296,51 @@ body.immersive .navbar {
 
 body.immersive #reader {
   max-width: 900px;
+  background: transparent;
+}
+
+body.immersive .container,
+body.immersive .reader {
+  background: transparent;
+  border-radius: 0;
 }
 
 body.immersive {
-  background: #0a0a0a;
+  background: #000;
+}
+
+@media (max-width: 768px) {
+  body.immersive {
+    background: #000;
+  }
+
+  body.immersive #reader {
+    max-width: 100%;
+    margin: 0;
+    padding: 20px 14px;
+    background: transparent;
+  }
+
+  body.immersive .container {
+    max-width: 100%;
+    padding: 16px 12px;
+    border-radius: 0;
+    background: transparent;
+  }
+
+  body.immersive #exit-immersive {
+    bottom: 12px;
+    right: 10px;
+    padding: 10px 12px;
+  }
+
+  body.immersive #settings-panel {
+    display: none;
+  }
+
+  body.immersive .chapter-nav {
+    margin-top: 24px;
+  }
 }
 
 /* Animations */
