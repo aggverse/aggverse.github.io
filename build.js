@@ -107,6 +107,7 @@ chapters.forEach((ch, i) => {
 <!DOCTYPE html>
 <html>
 <head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <link rel="stylesheet" href="../../assets/style.css">
 <script src="../../assets/reader.js" defer></script>
 </head>
@@ -178,6 +179,7 @@ ${ch.content}
 <!DOCTYPE html>
 <html>
 <head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <link rel="stylesheet" href="../../assets/style.css">
 </head>
 <body>
@@ -273,6 +275,7 @@ function buildHomepage() {
 <!DOCTYPE html>
 <html>
 <head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>

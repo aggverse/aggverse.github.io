@@ -316,100 +316,153 @@ body.immersive {
 
 /* Responsive */
 @media (max-width: 768px) {
+  html,
   body {
-    font-size: 18px;
+    font-size: 20px;
+    line-height: 1.6;
   }
 
   .reader,
   .container {
-    padding: 20px 14px;
+    padding: 24px 16px;
     max-width: 100%;
   }
 
   #reader,
   .reader {
-    font-size: 1.1rem;
+    font-size: 1.25rem;
   }
 
   #reader h1,
   .reader h1 {
-    font-size: 2rem;
+    font-size: 2.2rem;
     line-height: 1.2;
-    margin-bottom: 22px;
+    margin-bottom: 24px;
   }
 
   .content p {
-    font-size: 1.15rem;
-    line-height: 1.75;
-  }
-
-  .navbar {
-    padding: 10px 12px;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-
-  .nav-left {
-    gap: 10px;
-  }
-
-  .nav-btn,
-  .nav-current {
-    padding: 8px 10px;
-    font-size: 1rem;
-  }
-
-  .nav-btn {
-    font-size: 1rem;
-  }
-
-  #settings-panel {
-    right: 10px;
-    top: 55px;
-    width: 92%;
-  }
-
-  .chapter-nav {
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .chapter-nav a {
-    font-size: 1.1rem;
-  }
-
-  #exit-immersive {
-    right: 14px;
-    padding: 10px 14px;
-  }
-}
-
-@media (max-width: 600px) {
-  .reader,
-  .container {
-    padding: 16px 12px;
-    max-width: 100%;
-  }
-
-  #reader,
-  .reader {
-    font-size: 1.2rem;
-  }
-
-  #reader h1,
-  .reader h1 {
-    font-size: 2.1rem;
-    line-height: 1.25;
-    margin-bottom: 18px;
-  }
-
-  .content p {
-    font-size: 1.2rem;
+    font-size: 1.25rem;
     line-height: 1.8;
   }
 
   .navbar {
-    padding: 8px 10px;
+    padding: 10px 12px;
+    gap: 10px;
+    justify-content: space-between;
+  }
+
+  .nav-left {
+    gap: 10px;
+  }
+
+  .nav-btn,
+  .nav-current {
+    padding: 10px 12px;
+    font-size: 1.05rem;
+  }
+
+  .nav-btn:not(:first-child) {
+    display: none;
+  }
+
+  .nav-current {
+    font-weight: 700;
+    font-size: 1rem;
+    opacity: 0.85;
+  }
+
+  #settings-panel {
+    right: 8px;
+    top: 50px;
+    width: 96%;
+    min-width: auto;
+  }
+
+  .chapter-nav {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .chapter-nav a {
+    font-size: 1.15rem;
+    padding: 12px;
+    border-radius: 6px;
+  }
+
+  #exit-immersive {
+    right: 10px;
+    bottom: 14px;
+  }
+
+  .word-count {
+    display: none;
+  }
+
+  .reader,
+  .container {
+    padding: 18px 12px;
+  }
+
+  #reader h1,
+  .reader h1 {
+    font-size: 2.3rem;
+    line-height: 1.25;
+    margin-bottom: 20px;
+  }
+
+  .content p {
+    font-size: 1.3rem;
+    line-height: 1.85;
+  }
+
+  .chunk-nav {
+    margin-top: 18px;
+  }
+
+  .chapter-nav a {
+    font-size: 1.15rem;
+  }
+
+  .reader,
+  .container {
+    background: rgba(15, 17, 21, 0.95);
+    border-radius: 10px;
+  }
+}
+
+
+@media (max-width: 600px) {
+  html,
+  body {
+    font-size: 22px;
+    line-height: 1.6;
+  }
+
+  .reader,
+  .container {
+    padding: 18px 12px;
+    max-width: 100%;
+  }
+
+  #reader,
+  .reader {
+    font-size: 1.35rem;
+  }
+
+  #reader h1,
+  .reader h1 {
+    font-size: 2.3rem;
+    line-height: 1.25;
+    margin-bottom: 20px;
+  }
+
+  .content p {
+    font-size: 1.3rem;
+    line-height: 1.85;
+  }
+
+  .navbar {
+    padding: 10px 12px;
     gap: 8px;
   }
 
@@ -419,23 +472,23 @@ body.immersive {
 
   .nav-btn,
   .nav-current {
-    padding: 8px 10px;
-    font-size: 1rem;
+    padding: 10px 12px;
+    font-size: 1.05rem;
   }
 
   #settings-panel {
-    right: 8px;
+    right: 6px;
     top: 55px;
-    width: 94%;
+    width: 96%;
   }
 
   .chapter-nav {
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
   }
 
   .chapter-nav a {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
   }
 }
 
