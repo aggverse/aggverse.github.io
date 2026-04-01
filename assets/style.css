@@ -1,0 +1,170 @@
+body {
+  margin: 0;
+  background: #0f1115;
+  color: #e8e6e3;
+  font-family: 'Georgia', serif;
+}
+
+/* NAVBAR */
+.navbar {
+  position: sticky;
+  top: 0;
+  background: rgba(15,17,21,0.9);
+  padding: 15px 30px;
+  border-bottom: 1px solid #2a2d34;
+}
+
+.logo {
+  color: #d4af37;
+  text-decoration: none;
+  font-size: 1.2rem;
+}
+
+/* LAYOUT */
+.container {
+  max-width: 800px;
+  margin: auto;
+  padding: 40px 20px;
+}
+
+.title {
+  color: #d4af37;
+}
+
+/* NOVEL CARDS */
+.novel-card {
+  display: block;
+  padding: 20px;
+  margin-bottom: 20px;
+  border: 1px solid #2a2d34;
+  text-decoration: none;
+  color: inherit;
+  transition: 0.3s;
+}
+
+.novel-card:hover {
+  border-color: #d4af37;
+  background: #151821;
+}
+
+/* READER */
+.reader {
+  max-width: 700px;
+  margin: auto;
+  padding: 60px 20px;
+  line-height: 1.8;
+}
+
+.reader h1 {
+  color: #d4af37;
+  margin-bottom: 30px;
+}
+
+.content p {
+  margin-bottom: 20px;
+  font-size: 1.05rem;
+}
+
+/* CHAPTER NAV */
+.chapter-nav {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 50px;
+}
+
+.chapter-nav a {
+  color: #d4af37;
+  text-decoration: none;
+}
+
+/* PROGRESS BAR */
+#progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: #d4af37;
+  width: 0%;
+  z-index: 1000;
+}
+
+/* SETTINGS PANEL */
+#settings-panel {
+  position: fixed;
+  top: 60px;
+  right: 20px;
+  background: #151821;
+  border: 1px solid #2a2d34;
+  padding: 10px;
+}
+
+.hidden {
+  display: none;
+}
+
+/* CHAPTER LINKS */
+.chapter-link {
+  display: block;
+  padding: 10px 0;
+  color: #d4af37;
+  text-decoration: none;
+}
+
+/* BUTTON */
+button {
+  background: none;
+  border: 1px solid #d4af37;
+  color: #d4af37;
+  padding: 5px 10px;
+  margin: 3px;
+  cursor: pointer;
+}
+
+/* NOVEL CARD */
+.novel-card small {
+  display: block;
+  margin-top: 5px;
+  color: #888;
+}
+
+/* WORD COUNT */
+.word-count {
+  color: #888;
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+}
+
+.chapter-nav {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 40px;
+}
+
+.chapter-card {
+  display: block;
+  padding: 15px 20px;
+  margin: 10px 0;
+  border: 1px solid #2a2d34;
+  text-decoration: none;
+  color: inherit;
+  transition: 0.3s;
+}
+
+.chapter-card:hover {
+  border-color: #d4af37;
+  background: #151821;
+}
+
+.chapter-title {
+  color: #d4af37;
+  font-size: 1.1rem;
+}
+
+.reader {
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}

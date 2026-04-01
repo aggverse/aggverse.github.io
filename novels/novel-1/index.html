@@ -1,0 +1,48 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+
+<nav class="navbar">
+<a href="../../index.html">← Back</a>
+</nav>
+
+<main class="container">
+<h1>Novel One</h1>
+<p>Fantasy • Strategy</p>
+<div id="continue-reading"></div>
+<div id="chapters"></div>
+</main>
+
+<script>
+fetch("chapters.json")
+.then(r => r.json())
+.then(data => {
+  const el = document.getElementById("chapters");
+  data.forEach(c => {
+     const a = document.createElement("a");
+    a.href = c.file;
+    a.className = "chapter-card";
+  
+    a.innerHTML = '<div class="chapter-title">' + c.title + '</div>';
+    el.appendChild(a);
+  });
+});
+
+const last = localStorage.getItem("lastChapter");
+
+if (last) {
+  const btn = document.createElement("a");
+  btn.href = last;
+  btn.textContent = "Continue Reading";
+  btn.className = "chapter-card";
+  
+  document.getElementById("continue-reading").appendChild(btn);
+}
+</script>
+
+</body>
+</html>
