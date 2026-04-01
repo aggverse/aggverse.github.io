@@ -6,6 +6,26 @@ const writingDir = "writing";
 const outputDir = "novels";
 const targetNovel = process.argv[2]; // optional command-line argument e.g. node build.js novel-1
 
+function toTitleCase(str) {
+  return str
+    .replace(/[-_]/g, " ")
+    .toLowerCase()
+    .replace(/\b\w/g, c => c.toUpperCase())
+    .trim();
+}
+
+function extractChapterTitle(markdown, fallback) {
+  const heading = markdown.match(/^\s*#\s+(.+)/m);
+  if (heading && heading[1]) {
+    return heading[1].trim();
+  }
+  return fallback;
+}
+
+function sortChapterFiles(files) {
+  return files.slice().sort((a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' }));
+}
+
 function buildNovel(novelName) {
   const novelPath = path.join(writingDir, novelName);
   const outPath = path.join(outputDir, novelName);
@@ -21,6 +41,17 @@ function buildNovel(novelName) {
 
   const meta = JSON.parse(fs.readFileSync(metaPath));
 
+  // Copy cover image to output folder so index and cards can reference it
+  if (meta.cover) {
+    const coverSource = path.join(novelPath, meta.cover);
+    const coverDestination = path.join(outPath, path.basename(meta.cover));
+    if (fs.existsSync(coverSource)) {
+      fs.copyFileSync(coverSource, coverDestination);
+    } else {
+      console.warn(`Cover file '${meta.cover}' not found in ${novelPath}.`);
+    }
+  }
+
   const allFiles = fs.readdirSync(novelPath);
   const files = allFiles.filter(f => f.endsWith(".md"));
   if (files.length === 0) {
@@ -28,45 +59,33 @@ function buildNovel(novelName) {
     return;
   }
 
-  // validate file ordering based on numeric sequence in filenames, e.g. chapter-1.md, chapter-2.md
-  const fileNumbers = files.map(f => {
-    const m = f.match(/(\d+)/);
-    return m ? parseInt(m[1], 10) : null;
-  });
-  if (fileNumbers.some(n => n === null)) {
-    console.warn(`Some files in ${novelName} do not follow numeric naming and may be ordered unexpectedly.`);
-  } else {
-    const sortedNums = [...new Set(fileNumbers)].sort((a, b) => a - b);
-    for (let i = 0; i < sortedNums.length; i++) {
-      if (sortedNums[i] !== i + 1) {
-        console.warn(`Non-sequential chapter numbers in ${novelName}: expected ${i + 1}, found ${sortedNums[i]}.`);
-        break;
-      }
-    }
+  const orderedFiles = sortChapterFiles(files);
+
+  // warn if numeric sequence looks broken, but still build
+  const numericIds = orderedFiles
+    .map(f => {
+      const m = f.match(/(\d+)/);
+      return m ? parseInt(m[1], 10) : null;
+    })
+    .filter(n => n !== null);
+
+  if (numericIds.length > 0 && Math.max(...numericIds) !== numericIds.length) {
+    console.warn(`Possible nonsequential chapter numbering in ${novelName}.`);
   }
 
-  files.sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+  const chapters = [];
 
-let chapters = [];
-
-files.sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
-
-// 🧠 FIRST PASS — collect chapter data
-files.forEach(file => {
+  // 🧠 FIRST PASS — collect chapter data
+  orderedFiles.forEach(file => {
   const md = fs.readFileSync(path.join(novelPath, file), "utf-8");
 
   // 📊 WORD COUNT
-  const wordCount = md.trim().split(/\s+/).length;
+  const wordCount = md.trim().split(/\s+/).filter(Boolean).length;
   console.log(`${file}: ${wordCount} words`);
 
   // 📖 TITLE FROM MARKDOWN (# Chapter Title)
-  const titleMatch = md.match(/^#\s+(.*)/);
-  const cleanName = file
-    .replace(".md", "")
-    .replace(/-/g, " ")
-    .replace(/\b\w/g, c => c.toUpperCase());
-
-  const title = titleMatch ? titleMatch[1] : cleanName;
+  const fallbackTitle = toTitleCase(file.replace(/\.md$/, ""));
+  const title = extractChapterTitle(md, fallbackTitle);
 
   const htmlContent = marked(md);
 
@@ -102,6 +121,7 @@ chapters.forEach((ch, i) => {
   <div class="nav-left">
     <a href="../../index.html" class="nav-btn">Home</a>
     <a href="index.html" class="nav-btn">${meta.title}</a>
+    <span class="nav-current">${ch.title}</span>
   </div>
 
   <div class="nav-right">
@@ -173,8 +193,10 @@ ${ch.content}
 </nav>
 
 <main class="container">
+${meta.cover ? `<img class="novel-cover" src="${meta.cover}" alt="${meta.title} cover" />` : ""}
 <h1>${meta.title}</h1>
-<p>${meta.genre}</p>
+<p><strong>Genre:</strong> ${meta.genre}</p>
+<p><strong>Description:</strong> ${meta.description || "No description yet."}</p>
 <div id="continue-reading"></div>
 <div id="chapters"></div>
 </main>
@@ -238,8 +260,10 @@ function buildHomepage() {
 
     cards += `
     <a href="novels/${novel}/" class="novel-card">
+      ${meta.cover ? `<img class="novel-card-cover" src="novels/${novel}/${meta.cover}" alt="${meta.title} cover" />` : ""}
       <h2>${meta.title}</h2>
-      <p>${meta.genre}</p>
+      <p><strong>Genre:</strong> ${meta.genre}</p>
+      <p>${meta.description || "No description yet."}</p>
       <small>${meta.status}</small>
     </a>
     `;

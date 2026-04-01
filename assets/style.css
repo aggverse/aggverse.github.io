@@ -111,16 +111,23 @@ button,
   max-width: 800px;
   margin: 0 auto;
   padding: 40px 20px;
+  animation: fadeIn 1.7s ease;
 }
 
 .reader {
   line-height: 1.8;
-  animation: fadeIn 0.5s ease;
   transition: max-width 0.3s ease;
 }
 
 .reader.wide {
   max-width: 1000px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reader {
+    animation: none;
+    transition: none;
+  }
 }
 
 #reader {
@@ -153,6 +160,15 @@ button,
   transition: border-color 0.3s ease, background 0.3s ease;
 }
 
+.novel-card-cover,
+.novel-cover {
+  width: 100%;
+  height: auto;
+  max-height: 220px;
+  object-fit: cover;
+  border-radius: 6px;
+  margin-bottom: 14px;
+}
 .chapter-card {
   padding: 15px 20px;
   margin: 10px 0;
@@ -306,12 +322,41 @@ body.immersive {
 @media (max-width: 600px) {
   .reader,
   .container {
-    padding: 15px;
+    padding: 16px 12px;
     max-width: 100%;
+  }
+
+  #reader,
+  .reader {
+    font-size: 1rem;
+  }
+
+  #reader h1,
+  .reader h1 {
+    font-size: 1.8rem;
+    line-height: 1.2;
+    margin-bottom: 18px;
+  }
+
+  .content p {
+    font-size: 1.1rem;
+    line-height: 1.65;
   }
 
   .navbar {
     padding: 8px 12px;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .nav-left {
+    gap: 8px;
+  }
+
+  .nav-btn,
+  .nav-current {
+    padding: 6px 8px;
+    font-size: 0.95rem;
   }
 
   .nav-btn {
@@ -323,4 +368,14 @@ body.immersive {
     top: 50px;
     width: 90%;
   }
+
+  .chapter-nav {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .chapter-nav a {
+    font-size: 1rem;
+  }
 }
+

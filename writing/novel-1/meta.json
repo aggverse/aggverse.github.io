@@ -1,6 +1,7 @@
 {
-  "title": "Novel One",
-  "genre": "Fantasy • Strategy",
+  "title": "Lumina",
+  "genre": "Fantasy, Strategy",
   "status": "Ongoing",
-  "description": "A world where strategy shapes destiny."
+  "description": "A world where strategy shapes destiny.",
+  "cover": "luminacover.jpg"
 }
