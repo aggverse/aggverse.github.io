@@ -9,8 +9,11 @@ git add .
 echo 📝 Committing...
 git commit -m "update content"
 
+echo 🔄 Pulling from GitHub (handling first-time sync)...
+git pull origin main --allow-unrelated-histories
+
 echo 🚀 Pushing to GitHub...
-git push
+git push -u origin main
 
 echo ✅ Published!
 pause
