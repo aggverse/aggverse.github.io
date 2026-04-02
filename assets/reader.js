@@ -1,38 +1,5 @@
 const SCROLL_KEY = `scroll-${location.pathname}`;
 const LAST_CHAPTER_KEY = "lastChapter";
-const STORAGE_TRUE = "true";
-const FAVORITE_NOVEL_PREFIX = "favoriteNovel-";
-const FAVORITE_NOVEL_TITLE_PREFIX = "favoriteNovelTitle-";
-const FAVORITE_CHAPTER_PREFIX = "favoriteChapter-";
-const FAVORITE_CHAPTER_TITLE_PREFIX = "favoriteChapterTitle-";
-
-function toFavoriteNovelKey(novelSlug) {
-  return novelSlug ? `${FAVORITE_NOVEL_PREFIX}${novelSlug}` : null;
-}
-
-function toFavoriteNovelTitleKey(novelSlug) {
-  return novelSlug ? `${FAVORITE_NOVEL_TITLE_PREFIX}${novelSlug}` : null;
-}
-
-function toFavoriteChapterKey(novelSlug, chapterSlug) {
-  if (!novelSlug || !chapterSlug) return null;
-  return `${FAVORITE_CHAPTER_PREFIX}${encodeURIComponent(novelSlug)}|${encodeURIComponent(chapterSlug)}`;
-}
-
-function toLegacyFavoriteChapterKey(novelSlug, chapterSlug) {
-  if (!novelSlug || !chapterSlug) return null;
-  return `${FAVORITE_CHAPTER_PREFIX}${novelSlug}-${chapterSlug}`;
-}
-
-function toCanonicalFavoriteChapterTitleKey(novelSlug, chapterSlug) {
-  if (!novelSlug || !chapterSlug) return null;
-  return `${FAVORITE_CHAPTER_TITLE_PREFIX}${encodeURIComponent(novelSlug)}|${encodeURIComponent(chapterSlug)}`;
-}
-
-function toLegacyFavoriteChapterTitleKey(novelSlug, chapterSlug) {
-  if (!novelSlug || !chapterSlug) return null;
-  return `${FAVORITE_CHAPTER_TITLE_PREFIX}${novelSlug}|${chapterSlug}`;
-}
 
 function getNovelKey() {
   const match = location.pathname.match(/novels\/([^\/]+)/);
@@ -45,17 +12,17 @@ function getChapterSlug() {
 
 function getFavoriteNovelKey() {
   const novel = getNovelKey();
-  return toFavoriteNovelKey(novel);
+  return novel ? `favoriteNovel-${novel}` : null;
 }
 
 function getFavoriteNovelTitleKey() {
   const novel = getNovelKey();
-  return toFavoriteNovelTitleKey(novel);
+  return novel ? `favoriteNovelTitle-${novel}` : null;
 }
 
 function getFavoriteNovelTitle(novelSlug) {
   if (!novelSlug) return "";
-  const saved = localStorage.getItem(toFavoriteNovelTitleKey(novelSlug));
+  const saved = localStorage.getItem(`favoriteNovelTitle-${novelSlug}`);
   if (saved) return saved;
 
   const navTitle = document.getElementById("bookmark-chapter-nav-btn")?.getAttribute("data-novel-title") || document.querySelector(".nav-left .nav-current")?.innerText?.trim();
@@ -67,7 +34,8 @@ function getFavoriteNovelTitle(novelSlug) {
 }
 
 function getFavoriteChapterTitleKey(novelSlug, chapterSlug) {
-  return toLegacyFavoriteChapterTitleKey(novelSlug, chapterSlug);
+  if (!novelSlug || !chapterSlug) return null;
+  return `favoriteChapterTitle-${novelSlug}|${chapterSlug}`;
 }
 
 function getFavoriteCurrentChapterTitleKey() {
@@ -89,13 +57,14 @@ function getFavoriteChapterTitle(novelSlug, chapterSlug) {
 function getFavoriteChapterKey() {
   const novel = getNovelKey();
   const chapter = getChapterSlug();
-  return toFavoriteChapterKey(novel, chapter);
+  if (!novel || !chapter) return null;
+  return `favoriteChapter-${encodeURIComponent(novel)}|${encodeURIComponent(chapter)}`;
 }
 
 function getLegacyFavoriteChapterKey() {
   const novel = getNovelKey();
   const chapter = getChapterSlug();
-  return toLegacyFavoriteChapterKey(novel, chapter);
+  return novel && chapter ? `favoriteChapter-${novel}-${chapter}` : null;
 }
 
 function slugToFriendlyName(slug) {
@@ -107,7 +76,7 @@ function slugToFriendlyName(slug) {
 }
 
 function parseFavoriteChapterKey(key) {
-  const raw = key.slice(FAVORITE_CHAPTER_PREFIX.length);
+  const raw = key.replace(/^favoriteChapter-/, "");
   if (raw.includes("|")) {
     const [novelEnc, chapterEnc] = raw.split("|");
     return {
@@ -150,28 +119,25 @@ function getLastChapterStorageKey() {
 let fontSize = parseInt(localStorage.getItem("fontSize"), 10);
 if (!Number.isFinite(fontSize)) fontSize = 18;
 
-let isImmersive = localStorage.getItem("isImmersive") === STORAGE_TRUE;
+let isImmersive = localStorage.getItem("isImmersive") === "true";
 let isNovelFavorited = false;
 let isChapterFavorited = false;
 let commentsVisible = false;
 let undoTimeoutId = null;
 let lastRemovedFavorites = null;
-const docEl = document.documentElement;
-const progressBar = document.getElementById("progress-bar");
 
 function updateProgressBar() {
-  if (!progressBar) return;
+  const progress = document.getElementById("progress-bar");
+  if (!progress) return;
 
-  const scrollTop = docEl.scrollTop || window.scrollY;
-  const scrollHeight = docEl.scrollHeight;
-  const clientHeight = docEl.clientHeight;
+  const scrollTop = document.documentElement.scrollTop || window.scrollY;
+  const scrollHeight = document.documentElement.scrollHeight;
+  const clientHeight = document.documentElement.clientHeight;
   const height = Math.max(scrollHeight - clientHeight, 1);
   const percent = (scrollTop / height) * 100;
 
-  progressBar.style.width = `${Math.min(100, Math.max(0, percent))}%`;
+  progress.style.width = `${Math.min(100, Math.max(0, percent))}%`;
 }
-
-window.updateScrollProgress = updateProgressBar;
 
 function updateCommentsVisibility() {
   const comments = document.querySelector(".comments-section");
@@ -313,7 +279,7 @@ function toggleBookmarkNovel() {
 
   isNovelFavorited = !isNovelFavorited;
   if (isNovelFavorited) {
-    localStorage.setItem(key, STORAGE_TRUE);
+    localStorage.setItem(key, "true");
     if (titleKey) localStorage.setItem(titleKey, novelTitle);
   } else {
     localStorage.removeItem(key);
@@ -340,7 +306,7 @@ function toggleBookmarkChapter() {
 
   if (isChapterFavorited) {
     // persist canonical encoded key and remove legacy variant to prevent duplicate entries
-    localStorage.setItem(key, STORAGE_TRUE);
+    localStorage.setItem(key, "true");
     if (legacyKey) localStorage.removeItem(legacyKey);
     if (titleKey) localStorage.setItem(titleKey, dataChapterTitle);
     if (novelTitleKey) localStorage.setItem(novelTitleKey, dataNovelTitle);
@@ -357,20 +323,20 @@ function toggleBookmarkChapter() {
 
 function setupKeyboardNav() {
   document.addEventListener("keydown", (e) => {
-    const chapterNav = getChapterNavLinks();
-
     if (e.key === "ArrowRight") {
-      if (chapterNav.next) window.location.href = chapterNav.next.href;
+      const next = document.querySelector(".chapter-nav a:last-child");
+      if (next) window.location.href = next.href;
     }
 
     if (e.key === "ArrowLeft") {
-      if (chapterNav.prev) window.location.href = chapterNav.prev.href;
+      const prev = document.querySelector(".chapter-nav a:first-child");
+      if (prev) window.location.href = prev.href;
     }
   });
 }
 
 function preloadNextChapter() {
-  const { next: nextLink } = getChapterNavLinks();
+  const nextLink = document.querySelector(".chapter-nav a:last-child");
   if (nextLink && nextLink.href) {
     fetch(nextLink.href).catch(() => {
       // Ignore preload errors; not critical
@@ -378,55 +344,29 @@ function preloadNextChapter() {
   }
 }
 
-function getChapterNavLinks() {
-  return {
-    prev: document.querySelector(".chapter-nav a:first-child"),
-    next: document.querySelector(".chapter-nav a:last-child")
-  };
-}
-
-function getSettingsControls() {
-  return {
-    panel: document.getElementById("settings-panel"),
-    btn: document.getElementById("settings-btn")
-  };
-}
-
-function getUIElements() {
-  return {
-    settingsBtn: document.getElementById("settings-btn"),
-    settingsPanel: document.getElementById("settings-panel"),
-    favoritesToggle: document.getElementById("favorites-toggle-btn"),
-    favoritesPanel: document.getElementById("favorites-panel"),
-    novelBookmarkBtn: document.getElementById("bookmark-novel-btn"),
-    chapterNavBtn: document.getElementById("bookmark-chapter-nav-btn"),
-    commentsToggleBtn: document.getElementById("comments-toggle-btn"),
-    immersiveBtn: document.getElementById("immersive-btn"),
-    chapterBookmarkBtn: document.getElementById("bookmark-chapter-btn"),
-    changeFontButtons: document.querySelectorAll("[data-change-font]")
-  };
-}
-
 function setupUI() {
-  const ui = getUIElements();
-
-  if (ui.settingsBtn) {
-    ui.settingsBtn.addEventListener("click", (e) => {
+  const settingsBtn = document.getElementById("settings-btn");
+  if (settingsBtn) {
+    settingsBtn.addEventListener("click", (e) => {
       e.stopPropagation(); // prevent global click listener from hiding panel immediately
-      if (ui.settingsPanel) ui.settingsPanel.classList.toggle("hidden");
+      const panel = document.getElementById("settings-panel");
+      if (panel) panel.classList.toggle("hidden");
     });
   }
 
-  if (ui.favoritesToggle) {
-    ui.favoritesToggle.addEventListener("click", () => {
-      if (!ui.favoritesPanel) return;
-      ui.favoritesPanel.classList.toggle("hidden");
+  const favoritesToggle = document.getElementById("favorites-toggle-btn");
+  if (favoritesToggle) {
+    favoritesToggle.addEventListener("click", () => {
+      const panel = document.getElementById("favorites-panel");
+      if (!panel) return;
+      panel.classList.toggle("hidden");
       renderFavoritesPanel();
     });
   }
 
-  if (ui.favoritesPanel) {
-    ui.favoritesPanel.addEventListener("click", (e) => {
+  const favoritesPanel = document.getElementById("favorites-panel");
+  if (favoritesPanel) {
+    favoritesPanel.addEventListener("click", (e) => {
       const removeBtn = e.target.closest(".favorite-remove-btn");
       if (!removeBtn) return;
       const key = removeBtn.getAttribute("data-key");
@@ -434,34 +374,40 @@ function setupUI() {
     });
   }
 
-  ui.changeFontButtons.forEach((button) => {
+  const changeFontButtons = document.querySelectorAll("[data-change-font]");
+  changeFontButtons.forEach((button) => {
     const delta = Number(button.getAttribute("data-change-font"));
     if (Number.isFinite(delta)) {
       button.addEventListener("click", () => changeFont(delta));
     }
   });
 
-  if (ui.novelBookmarkBtn) {
-    ui.novelBookmarkBtn.addEventListener("click", toggleBookmarkNovel);
+  const novelBookmarkBtn = document.getElementById("bookmark-novel-btn");
+  if (novelBookmarkBtn) {
+    novelBookmarkBtn.addEventListener("click", toggleBookmarkNovel);
   }
 
-  if (ui.chapterNavBtn) {
-    ui.chapterNavBtn.addEventListener("click", toggleBookmarkChapter);
+  const chapterNavBtn = document.getElementById("bookmark-chapter-nav-btn");
+  if (chapterNavBtn) {
+    chapterNavBtn.addEventListener("click", toggleBookmarkChapter);
   }
 
-  if (ui.commentsToggleBtn) {
-    ui.commentsToggleBtn.addEventListener("click", () => {
+  const commentsToggleBtn = document.getElementById("comments-toggle-btn");
+  if (commentsToggleBtn) {
+    commentsToggleBtn.addEventListener("click", () => {
       commentsVisible = !commentsVisible;
       updateCommentsVisibility();
     });
   }
 
-  if (ui.immersiveBtn) {
-    ui.immersiveBtn.addEventListener("click", toggleImmersive);
+  const immersiveBtn = document.getElementById("immersive-btn");
+  if (immersiveBtn) {
+    immersiveBtn.addEventListener("click", toggleImmersive);
   }
 
-  if (ui.chapterBookmarkBtn) {
-    ui.chapterBookmarkBtn.addEventListener("click", toggleBookmarkChapter);
+  const chapterBookmarkBtn = document.getElementById("bookmark-chapter-btn");
+  if (chapterBookmarkBtn) {
+    chapterBookmarkBtn.addEventListener("click", toggleBookmarkChapter);
   }
 
   // Keep compatibility with inline onclick handlers for existing markup
@@ -471,12 +417,10 @@ function setupUI() {
   window.toggleBookmarkChapter = toggleBookmarkChapter;
 }
 
-function handleWindowScroll() {
+window.addEventListener("scroll", () => {
   updateProgressBar();
   saveScrollPosition();
-}
-
-window.addEventListener("scroll", handleWindowScroll, { passive: true });
+});
 
 window.addEventListener("load", () => {
   restoreScrollPosition();
@@ -500,33 +444,33 @@ function removeFavorite(key) {
 
   const removedKeys = [key];
 
-  if (key.startsWith(FAVORITE_NOVEL_PREFIX)) {
-    const novelSlug = key.slice(FAVORITE_NOVEL_PREFIX.length);
-    const titleKey = toFavoriteNovelTitleKey(novelSlug);
-    if (titleKey) removedKeys.push(titleKey);
+  if (key.startsWith("favoriteNovel-")) {
+    const novelSlug = key.replace("favoriteNovel-", "");
+    const titleKey = `favoriteNovelTitle-${novelSlug}`;
+    removedKeys.push(titleKey);
 
     const encodedNovel = encodeURIComponent(novelSlug);
 
     Object.keys(localStorage).forEach(k => {
-      if (k.startsWith(`${FAVORITE_CHAPTER_PREFIX}${encodedNovel}|`) || k.startsWith(`${FAVORITE_CHAPTER_PREFIX}${novelSlug}-`)) {
+      if (k.startsWith(`favoriteChapter-${encodedNovel}|`) || k.startsWith(`favoriteChapter-${novelSlug}-`)) {
         removedKeys.push(k);
       }
-      if (k.startsWith(`${FAVORITE_CHAPTER_TITLE_PREFIX}${encodedNovel}|`) || k.startsWith(`${FAVORITE_CHAPTER_TITLE_PREFIX}${novelSlug}|`)) {
+      if (k.startsWith(`favoriteChapterTitle-${encodedNovel}|`) || k.startsWith(`favoriteChapterTitle-${novelSlug}|`)) {
         removedKeys.push(k);
       }
     });
   }
 
-  if (key.startsWith(FAVORITE_CHAPTER_PREFIX)) {
+  if (key.startsWith("favoriteChapter-")) {
     const parsed = parseFavoriteChapterKey(key);
     if (parsed?.novel && parsed?.chapter) {
-      const canonical = toFavoriteChapterKey(parsed.novel, parsed.chapter);
-      const legacy = toLegacyFavoriteChapterKey(parsed.novel, parsed.chapter);
+      const canonical = `favoriteChapter-${encodeURIComponent(parsed.novel)}|${encodeURIComponent(parsed.chapter)}`;
+      const legacy = `favoriteChapter-${parsed.novel}-${parsed.chapter}`;
       removedKeys.push(canonical);
       removedKeys.push(legacy);
 
-      const canonicalTitle = toCanonicalFavoriteChapterTitleKey(parsed.novel, parsed.chapter);
-      const legacyTitle = toLegacyFavoriteChapterTitleKey(parsed.novel, parsed.chapter);
+      const canonicalTitle = `favoriteChapterTitle-${encodeURIComponent(parsed.novel)}|${encodeURIComponent(parsed.chapter)}`;
+      const legacyTitle = `favoriteChapterTitle-${parsed.novel}|${parsed.chapter}`;
       removedKeys.push(canonicalTitle);
       removedKeys.push(legacyTitle);
     }
@@ -551,15 +495,15 @@ function isChapterFavoriteStored() {
   const legacyChapterKey = getLegacyFavoriteChapterKey();
 
   if (!chapterKey) return false;
-  if (localStorage.getItem(chapterKey) === STORAGE_TRUE) return true;
-  if (legacyChapterKey && localStorage.getItem(legacyChapterKey) === STORAGE_TRUE) return true;
+  if (localStorage.getItem(chapterKey) === "true") return true;
+  if (legacyChapterKey && localStorage.getItem(legacyChapterKey) === "true") return true;
   return false;
 }
 
 function setupBookmarks() {
   const novelKey = getFavoriteNovelKey();
   if (novelKey) {
-    isNovelFavorited = localStorage.getItem(novelKey) === STORAGE_TRUE;
+    isNovelFavorited = localStorage.getItem(novelKey) === "true";
   }
 
   isChapterFavorited = isChapterFavoriteStored();
@@ -576,12 +520,12 @@ function renderFavoritesPanel() {
   if (!panel) return;
 
   const keys = Object.keys(localStorage);
-  const novelEntries = keys.filter(k => k.startsWith(FAVORITE_NOVEL_PREFIX) && localStorage.getItem(k) === STORAGE_TRUE);
+  const novelEntries = keys.filter(k => k.startsWith("favoriteNovel-") && localStorage.getItem(k) === "true");
 
   const chapterMap = new Map();
   keys.forEach(k => {
-    if (!k.startsWith(FAVORITE_CHAPTER_PREFIX)) return;
-    if (localStorage.getItem(k) !== STORAGE_TRUE) return;
+    if (!k.startsWith("favoriteChapter-")) return;
+    if (localStorage.getItem(k) !== "true") return;
 
     const { novel, chapter } = parseFavoriteChapterKey(k);
     if (!novel || !chapter) return;
@@ -597,7 +541,7 @@ function renderFavoritesPanel() {
 
     // On load, normalize to canonical storage (remove legacy leftover)
     if (isCanonical) {
-      const legacyKey = toLegacyFavoriteChapterKey(novel, chapter);
+      const legacyKey = `favoriteChapter-${novel}-${chapter}`;
       if (localStorage.getItem(legacyKey)) {
         localStorage.removeItem(legacyKey);
       }
@@ -617,7 +561,7 @@ function renderFavoritesPanel() {
   if (novelEntries.length > 0) {
     html += "<div><strong>Novels</strong></div>";
     novelEntries.forEach(key => {
-      const novelSlug = key.slice(FAVORITE_NOVEL_PREFIX.length);
+      const novelSlug = key.replace("favoriteNovel-", "");
       const displayNovel = getFavoriteNovelTitle(novelSlug);
       html += `
       <div class="favorite-entry">
@@ -645,8 +589,13 @@ function renderFavoritesPanel() {
   panel.innerHTML = html;
 }
 
+
+
+let uiVisible = false;
+
 document.addEventListener("click", (e) => {
-  const { panel, btn } = getSettingsControls();
+  const panel = document.getElementById("settings-panel");
+  const btn = document.getElementById("settings-btn");
 
   if (!panel || !btn) return;
 
@@ -662,6 +611,18 @@ document.addEventListener("keydown", (e) => {
     applySettings();
   }
 });
+
+let hideTimer;
+
+function showUI() {
+  const navbar = document.querySelector(".navbar");
+  navbar.classList.remove("hidden");
+
+  clearTimeout(hideTimer);
+  hideTimer = setTimeout(() => {
+    if (isImmersive) navbar.classList.add("hidden");
+  }, 3000);
+}
 
 let startY = 0;
 

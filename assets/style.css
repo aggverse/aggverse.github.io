@@ -1,65 +1,35 @@
-/*
+﻿/*
   Cleaned styles for aggverse.github.io
   - grouped sections
-  - premium motion and surfaces
-  - mobile-friendly layout
+  - removed duplicates
+  - consistent spacing
+  - easier override order
 */
 
+/* Base */
 :root {
   --bg: #0f1115;
-  --bg-dark: #111317;
+  --bg-dark: #111;
   --bg-alt: #151821;
-  --bg-glow: radial-gradient(circle at top, rgba(212, 175, 55, 0.14), transparent 34%), radial-gradient(circle at bottom right, rgba(67, 78, 117, 0.18), transparent 28%);
-  --surface: rgba(15, 17, 21, 0.95);
-  --surface-panel: rgba(15, 17, 21, 0.92);
-  --surface-comments: rgba(20, 24, 30, 0.96);
   --border: #2a2d34;
   --text: #e8e6e3;
-  --muted: #8b8f97;
+  --muted: #888;
   --primary: #d4af37;
-  --interactive: #d9c684;
+  --interactive: #aaa;
   --accent: #d4af37;
   --text-body: #e8e6e3;
-  --ease-premium: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
-  --dur-fast: 180ms;
-  --dur-med: 320ms;
-  --dur-slow: 760ms;
 }
 
 * {
   box-sizing: border-box;
 }
 
-html {
-  scroll-behavior: smooth;
-  background: var(--bg);
-}
-
 body {
   margin: 0;
-  background-color: var(--bg);
-  background-image: var(--bg-glow);
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-size: cover;
+  background: var(--bg);
   color: var(--text-body);
-  font-family: Georgia, serif;
-  -webkit-font-smoothing: antialiased;
-  text-rendering: geometricPrecision;
-  transition: background var(--dur-med) var(--ease-premium);
-}
-
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  background:
-    linear-gradient(to bottom, rgba(212, 175, 55, 0.03), transparent 26%),
-    radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.045), transparent 42%);
-  opacity: 0.9;
-  z-index: -1;
+  font-family: 'Georgia', serif;
+  transition: background 0.3s ease;
 }
 
 a {
@@ -84,14 +54,11 @@ button,
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: rgba(15, 17, 21, 0.82);
+  background: rgba(15,17,21,0.9);
   border-bottom: 1px solid var(--border);
   padding: 10px 20px;
   z-index: 500;
-  transition: opacity var(--dur-med) var(--ease-premium), transform var(--dur-med) var(--ease-premium), background var(--dur-med) var(--ease-premium);
-  -webkit-backdrop-filter: blur(14px);
-  backdrop-filter: blur(14px);
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.18);
+  transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
 .logo {
@@ -103,22 +70,20 @@ button,
 .nav-left {
   display: flex;
   gap: 10px;
-  align-items: center;
 }
 
 .nav-btn,
 .nav-current {
   text-decoration: none;
-  color: var(--primary);
+  color: var(--interactive);
   padding: 5px 10px;
   border: 1px solid transparent;
-  transition: color var(--dur-fast) var(--ease-soft), border-color var(--dur-fast) var(--ease-soft), transform var(--dur-fast) var(--ease-soft);
+  transition: color 0.2s ease, border-color 0.2s ease;
 }
 
 .nav-btn:hover {
   color: var(--primary);
   border-color: var(--border);
-  transform: translateY(-1px);
 }
 
 .nav-btn:last-child,
@@ -130,15 +95,14 @@ button,
 .icon-btn {
   background: transparent;
   border: none;
-  color: var(--primary);
+  color: var(--interactive);
   cursor: pointer;
   padding: 5px;
-  transition: color var(--dur-fast) var(--ease-soft), transform var(--dur-fast) var(--ease-soft);
+  transition: color 0.2s ease;
 }
 
 .icon-btn:hover {
   color: var(--primary);
-  transform: translateY(-1px);
 }
 
 /* Reader shell */
@@ -147,23 +111,16 @@ button,
   max-width: 800px;
   margin: 0 auto;
   padding: 40px 20px;
-  animation: pageEnter var(--dur-slow) var(--ease-premium) both;
+  animation: fadeIn 1.7s ease;
 }
 
 .reader {
   line-height: 1.8;
-  transition: max-width var(--dur-med) var(--ease-premium), transform var(--dur-med) var(--ease-premium), opacity var(--dur-med) var(--ease-premium);
-  will-change: transform, opacity;
+  transition: max-width 0.3s ease;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .reader,
-  .container,
-  .novel-card,
-  .chapter-card,
-  #settings-panel,
-  #favorites-panel,
-  .comments-section {
+  .reader {
     animation: none;
     transition: none;
   }
@@ -171,7 +128,7 @@ button,
 
 #reader {
   font-size: clamp(16px, 4vw, 20px);
-  transition: font-size var(--dur-fast) var(--ease-soft), max-width var(--dur-med) var(--ease-premium);
+  transition: font-size 0.2s ease, max-width 0.3s ease;
   max-width: 700px;
   margin: 0 auto;
 }
@@ -196,55 +153,7 @@ button,
   border: 1px solid var(--border);
   text-decoration: none;
   color: inherit;
-  background: linear-gradient(180deg, rgba(20, 24, 30, 0.98), rgba(15, 17, 21, 0.98));
-  box-shadow: 0 0 0 rgba(0, 0, 0, 0);
-  transform: translateY(0);
-  transition:
-    border-color var(--dur-med) var(--ease-soft),
-    background var(--dur-med) var(--ease-soft),
-    transform var(--dur-med) var(--ease-soft),
-    box-shadow var(--dur-med) var(--ease-soft);
-  animation: cardEnter 700ms var(--ease-premium) both;
-}
-
-.container > .novel-card:nth-of-type(1),
-.reader > .chapter-card:nth-of-type(1) {
-  animation-delay: 60ms;
-}
-
-.container > .novel-card:nth-of-type(2),
-.reader > .chapter-card:nth-of-type(2) {
-  animation-delay: 120ms;
-}
-
-.container > .novel-card:nth-of-type(3),
-.reader > .chapter-card:nth-of-type(3) {
-  animation-delay: 180ms;
-}
-
-.container > .novel-card:nth-of-type(4),
-.reader > .chapter-card:nth-of-type(4) {
-  animation-delay: 240ms;
-}
-
-.container > .novel-card:nth-of-type(5),
-.reader > .chapter-card:nth-of-type(5) {
-  animation-delay: 300ms;
-}
-
-.container > .novel-card:nth-of-type(6),
-.reader > .chapter-card:nth-of-type(6) {
-  animation-delay: 360ms;
-}
-
-.container > .novel-card:nth-of-type(7),
-.reader > .chapter-card:nth-of-type(7) {
-  animation-delay: 420ms;
-}
-
-.container > .novel-card:nth-of-type(8),
-.reader > .chapter-card:nth-of-type(8) {
-  animation-delay: 480ms;
+  transition: border-color 0.3s ease, background 0.3s ease;
 }
 
 .novel-card-cover,
@@ -256,7 +165,6 @@ button,
   border-radius: 6px;
   margin-bottom: 14px;
 }
-
 .chapter-card {
   padding: 15px 20px;
   margin: 10px 0;
@@ -264,10 +172,8 @@ button,
 
 .novel-card:hover,
 .chapter-card:hover {
-  border-color: rgba(212, 175, 55, 0.55);
-  background: linear-gradient(180deg, rgba(24, 29, 36, 0.99), rgba(17, 20, 25, 0.99));
-  transform: translateY(-5px) scale(1.01);
-  box-shadow: 0 22px 44px rgba(0, 0, 0, 0.32), 0 0 0 1px rgba(212, 175, 55, 0.08);
+  border-color: var(--accent);
+  background: var(--bg-alt);
 }
 
 .chapter-title,
@@ -300,12 +206,6 @@ button,
 .chapter-nav a {
   color: var(--primary);
   text-decoration: none;
-  transition: transform var(--dur-fast) var(--ease-soft), opacity var(--dur-fast) var(--ease-soft), color var(--dur-fast) var(--ease-soft);
-}
-
-.chapter-nav a:hover {
-  transform: translateY(-1px);
-  opacity: 0.95;
 }
 
 /* Progress bar */
@@ -317,7 +217,6 @@ button,
   background: var(--primary);
   width: 0;
   z-index: 1000;
-  transition: width 90ms linear;
 }
 
 /* Settings panel */
@@ -325,45 +224,37 @@ button,
   position: fixed;
   top: 60px;
   right: 20px;
-  background: rgba(17, 17, 17, 0.88);
+  background: var(--bg-dark);
   border: 1px solid var(--border);
   padding: 10px;
   z-index: 1000;
   min-width: 180px;
-  opacity: 1;
-  transform: translateY(0) scale(1);
-  transform-origin: top right;
-  transition: opacity var(--dur-med) var(--ease-premium), transform var(--dur-med) var(--ease-premium);
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
+  transition: opacity 0.2s ease;
 }
 
 #settings-panel.hidden {
   opacity: 0;
   pointer-events: none;
-  transform: translateY(-8px) scale(0.985);
 }
 
 #settings-panel button {
   background: transparent;
   border: 1px solid var(--border);
-  color: var(--primary);
+  color: var(--interactive);
   padding: 5px 10px;
   cursor: pointer;
-  transition: border-color var(--dur-fast) var(--ease-soft), color var(--dur-fast) var(--ease-soft), background var(--dur-fast) var(--ease-soft), transform var(--dur-fast) var(--ease-soft);
+  transition: border-color 0.2s ease, color 0.2s ease;
   margin: 0 2px 3px 0;
 }
 
 #settings-panel button:hover {
   border-color: var(--accent);
-  color: var(--primary);
-  transform: translateY(-1px);
+  color: #fff;
 }
 
 #settings-panel button.active {
   border-color: var(--accent);
-  color: var(--primary);
+  color: var(--accent);
   background: rgba(212, 175, 55, 0.1);
 }
 
@@ -391,14 +282,12 @@ button,
   position: fixed;
   bottom: 20px;
   right: 20px;
-  background: rgba(17, 17, 17, 0.9);
+  background: var(--bg-dark);
   border: 1px solid var(--primary);
   color: var(--primary);
   padding: 8px 12px;
   border-radius: 6px;
   display: none;
-  transition: transform var(--dur-fast) var(--ease-soft), opacity var(--dur-fast) var(--ease-soft), background var(--dur-fast) var(--ease-soft);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.26);
 }
 
 body.immersive #exit-immersive {
@@ -406,92 +295,65 @@ body.immersive #exit-immersive {
 }
 
 body.immersive .navbar {
-  display: none;
-}
-
-body.immersive::before {
   opacity: 0;
-}
-
-body.immersive > :not(#progress-bar):not(#exit-immersive):not(#reader) {
-  display: none !important;
+  transform: translateY(-10px);
+  pointer-events: none;
 }
 
 body.immersive #reader {
-  max-width: 100%;
-  width: 100%;
-  position: fixed;
-  inset: 0;
-  height: 100vh;
-  overflow-y: auto;
-  overflow-x: hidden;
-  margin: 0;
-  padding: 18px clamp(16px, 4vw, 48px) 28px;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.96), rgba(5, 6, 10, 0.98));
-  color: #f1eee7;
-  box-shadow: none;
-  border-radius: 0;
+  max-width: 900px;
+  background: transparent;
 }
 
 body.immersive .container,
 body.immersive .reader {
-  max-width: 100%;
-  width: 100%;
-  position: fixed;
-  inset: 0;
-  height: 100vh;
-  overflow-y: auto;
-  overflow-x: hidden;
-  margin: 0;
-  padding: 18px clamp(16px, 4vw, 48px) 28px;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.96), rgba(5, 6, 10, 0.98));
-  color: #f1eee7;
+  background: transparent;
   border-radius: 0;
-  box-shadow: none;
 }
 
 body.immersive {
   background: #000;
-  color: #f1eee7;
-  overflow: hidden;
 }
 
-body.immersive #settings-panel {
-  display: none;
-}
+@media (max-width: 768px) {
+  body.immersive {
+    background: #000;
+  }
 
-body.immersive .chapter-nav,
-body.immersive .word-count {
-  display: none !important;
+  body.immersive #reader {
+    max-width: 100%;
+    margin: 0;
+    padding: 20px 14px;
+    background: transparent;
+  }
+
+  body.immersive .container {
+    max-width: 100%;
+    padding: 16px 12px;
+    border-radius: 0;
+    background: transparent;  
+  }
+
+  body.immersive #exit-immersive {
+    bottom: 12px;
+    right: 10px;
+    padding: 10px 12px;
+  }
+
+  body.immersive #settings-panel {
+    display: none;
+  }
+
+  body.immersive .chapter-nav {
+    margin-top: 24px;
+  }
 }
 
 /* Animations */
-@keyframes pageEnter {
+@keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(14px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes cardEnter {
-  from {
-    opacity: 0;
-    transform: translateY(16px) scale(0.985);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-@keyframes sectionEnter {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
+    transform: translateY(8px);
   }
   to {
     opacity: 1;
@@ -501,36 +363,49 @@ body.immersive .word-count {
 
 /* Responsive */
 @media (max-width: 768px) {
-  body::before {
-    opacity: 0.72;
-  }
-
   html,
   body {
-    font-size: 18px;
-    line-height: 1.65;
+    font-size: 20px;
+    line-height: 1.6;
+  }
+
+  .reader,
+  .container {
+    padding: 24px 16px;
+    max-width: 100%;
   }
 
   #reader,
   .reader {
-    font-size: clamp(1.05rem, 4.2vw, 1.2rem);
+    font-size: 1.25rem;
+  }
+
+  #reader h1,
+  .reader h1 {
+    font-size: 2.2rem;
+    line-height: 1.2;
+    margin-bottom: 24px;
+  }
+
+  .content p {
+    font-size: 1.25rem;
+    line-height: 1.8;
   }
 
   .navbar {
-    padding: 10px 10px;
-    gap: 8px;
+    padding: 10px 12px;
+    gap: 10px;
     justify-content: space-between;
   }
 
   .nav-left {
-    gap: 6px;
-    flex-wrap: wrap;
+    gap: 10px;
   }
 
   .nav-btn,
   .nav-current {
-    padding: 8px 10px;
-    font-size: 0.94rem;
+    padding: 10px 12px;
+    font-size: 1.05rem;
   }
 
   .nav-btn:not(:first-child) {
@@ -540,15 +415,14 @@ body.immersive .word-count {
   .nav-current {
     font-weight: 700;
     font-size: 1rem;
-    opacity: 0.9;
+    opacity: 0.85;
   }
 
   #settings-panel {
     right: 8px;
     top: 50px;
-    width: min(96vw, 320px);
+    width: 96%;
     min-width: auto;
-    padding: 12px;
   }
 
   .chapter-nav {
@@ -557,8 +431,8 @@ body.immersive .word-count {
   }
 
   .chapter-nav a {
-    font-size: 1rem;
-    padding: 12px 14px;
+    font-size: 1.15rem;
+    padding: 12px;
     border-radius: 6px;
   }
 
@@ -571,114 +445,51 @@ body.immersive .word-count {
     display: none;
   }
 
+  .reader,
+  .container {
+    padding: 18px 12px;
+  }
+
   #reader h1,
   .reader h1 {
-    font-size: clamp(1.8rem, 7vw, 2.3rem);
+    font-size: 2.3rem;
     line-height: 1.25;
     margin-bottom: 20px;
   }
 
   .content p {
-    font-size: clamp(1.05rem, 4.8vw, 1.18rem);
-    line-height: 1.8;
+    font-size: 1.3rem;
+    line-height: 1.85;
   }
 
   .chunk-nav {
     margin-top: 18px;
   }
 
+  .chapter-nav a {
+    font-size: 1.15rem;
+  }
+
   .reader,
   .container {
-    max-width: 100%;
-    padding: 18px 14px;
-    background: var(--surface);
+    background: rgba(15, 17, 21, 0.95);
     border-radius: 10px;
   }
-
-  body.immersive #reader {
-    max-width: 100%;
-    margin: 0;
-    position: fixed;
-    inset: 0;
-    height: 100vh;
-    padding: 18px 16px 20px;
-    background: transparent;
-  }
-
-  body.immersive .container {
-    max-width: 100%;
-    position: fixed;
-    inset: 0;
-    height: 100vh;
-    padding: 16px 16px 18px;
-    border-radius: 0;
-    background: transparent;
-  }
-
-  body.immersive #settings-panel {
-    display: none;
-  }
-
-  body.immersive .chapter-nav {
-    margin-top: 24px;
-  }
 }
+
 
 @media (max-width: 600px) {
   html,
   body {
-    font-size: 17px;
-    line-height: 1.7;
+    font-size: 22px;
+    line-height: 1.6;
   }
 
   .floating-btn {
-    width: 50px;
-    height: 50px;
-    bottom: 16px;
-    left: 14px;
-  }
-
-  #favorites-panel {
-    left: 10px;
-    right: 10px;
-    width: auto;
-    bottom: 78px;
-    max-height: 52vh;
-  }
-
-  .navbar {
-    padding: 8px 8px;
-  }
-
-  .nav-left {
-    gap: 6px;
-    overflow-x: auto;
-    -ms-overflow-style: none;
-  }
-
-  .nav-left::-webkit-scrollbar {
-    display: none;
-  }
-
-  .nav-btn,
-  .nav-current {
-    white-space: nowrap;
-    padding: 8px 10px;
-  }
-
-  .chapter-nav {
-    gap: 10px;
-  }
-
-  .chapter-nav a {
-    width: 100%;
-    text-align: center;
-  }
-
-  .nav-current {
-    max-width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    width: 48px;
+    height: 48px;
+    bottom: 18px;
+    left: 16px;
   }
 }
 
@@ -690,7 +501,7 @@ body.immersive .word-count {
   height: 45px;
   border-radius: 50%;
   border: 1px solid var(--border);
-  background: rgba(15, 17, 21, 0.92);
+  background: rgba(15, 17, 21, 0.95);
   color: var(--text-body);
   display: flex;
   align-items: center;
@@ -698,13 +509,6 @@ body.immersive .word-count {
   font-size: 1.2rem;
   z-index: 1002;
   cursor: pointer;
-  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.28);
-  transition: transform var(--dur-med) var(--ease-soft), box-shadow var(--dur-med) var(--ease-soft), border-color var(--dur-fast) var(--ease-soft), background var(--dur-fast) var(--ease-soft);
-}
-
-.floating-btn:hover {
-  transform: translateY(-3px) scale(1.02);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.34);
 }
 
 #favorites-panel {
@@ -713,16 +517,12 @@ body.immersive .word-count {
   left: 12px;
   width: 280px;
   max-height: 60vh;
-  background: rgba(15, 17, 21, 0.88);
+  background: rgba(15, 17, 21, 0.92);
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 12px;
   overflow-y: auto;
   z-index: 1001;
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
-  transition: opacity var(--dur-med) var(--ease-premium), transform var(--dur-med) var(--ease-premium);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
 }
 
 #favorites-panel.hidden {
@@ -775,22 +575,46 @@ body.immersive .word-count {
 
 /* Disqus comments styling */
 .comments-section {
-  margin-top: 36px;
-  padding: 14px;
-  background: linear-gradient(180deg, rgba(20, 24, 30, 0.98), rgba(15, 17, 21, 0.98));
+  margin-top: 48px;
+  padding: 18px;
+  background: rgba(20, 24, 30, 0.96);
   border: 1px solid var(--border);
   border-radius: 8px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.38);
+  animation: fadeInUp 0.5s ease;
   max-width: 100%;
-  animation: sectionEnter 700ms var(--ease-premium) both;
-  box-shadow: 0 16px 38px rgba(0, 0, 0, 0.26);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
+  position: relative;
 }
 
 body.immersive .comments-section {
   display: none !important;
 }
 
+.comments-section h2 {
+  margin: 0 0 14px;
+  font-size: 1.18rem;
+  color: var(--primary);
+}
+
 .comments-section #disqus_thread {
   min-height: 240px;
 }
+
+/* Only show Disqus when adsorbing at bottom by manual scroll (no JS needed in this scope) */
+.comments-section::before {
+  content: "“Comments appear after you finish reading in immersive mode.”";
+  display: none;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
