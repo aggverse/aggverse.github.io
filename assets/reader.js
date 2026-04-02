@@ -175,25 +175,18 @@ window.updateScrollProgress = updateProgressBar;
 
 function updateCommentsVisibility() {
   const comments = document.querySelector(".comments-section");
+  const toggle = document.getElementById("comments-toggle-btn");
   if (!comments) return;
 
   if (isImmersive) {
     comments.classList.add("hidden");
     commentsVisible = false;
-    const toggle = document.getElementById("comments-toggle-btn");
     if (toggle) toggle.classList.remove("active");
-    if (toggle) toggle.textContent = "Show comments";
     return;
   }
 
-  const shouldShow = commentsVisible;
-  comments.classList.toggle("hidden", !shouldShow);
-
-  const toggle = document.getElementById("comments-toggle-btn");
-  if (toggle) {
-    toggle.textContent = shouldShow ? "Hide comments" : "Show comments";
-    toggle.classList.toggle("active", shouldShow);
-  }
+  comments.classList.toggle("hidden", !commentsVisible);
+  if (toggle) toggle.classList.toggle("active", commentsVisible);
 }
 
 function saveScrollPosition() {
@@ -221,6 +214,7 @@ function estimateReadingTime() {
 
 function applySettings() {
   const reader = document.getElementById("reader");
+  const isReaderPage = Boolean(reader);
   const immersiveBtn = document.getElementById("immersive-btn");
   const novelBookmarkBtn = document.getElementById("bookmark-novel-btn");
   const chapterBookmarkBtn = document.getElementById("bookmark-chapter-btn");
@@ -248,7 +242,7 @@ function applySettings() {
     chapterNavBtn.textContent = isChapterFavorited ? "★" : "☆";
   }
 
-  document.body.classList.toggle("immersive", isImmersive);
+  document.body.classList.toggle("immersive", isReaderPage && isImmersive);
 
   const indicator = document.getElementById("font-indicator");
   if (indicator) indicator.textContent = `${fontSize}px`;
