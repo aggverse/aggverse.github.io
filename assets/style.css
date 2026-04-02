@@ -11,6 +11,9 @@
   --bg: #0f1115;
   --bg-dark: #111;
   --bg-alt: #151821;
+  --surface: rgba(15, 17, 21, 0.95);
+  --surface-panel: rgba(15, 17, 21, 0.92);
+  --surface-comments: rgba(20, 24, 30, 0.96);
   --border: #2a2d34;
   --text: #e8e6e3;
   --muted: #888;
@@ -54,7 +57,7 @@ button,
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: rgba(15,17,21,0.9);
+  background: rgba(15, 17, 21, 0.9);
   border-bottom: 1px solid var(--border);
   padding: 10px 20px;
   z-index: 500;
@@ -316,10 +319,6 @@ body.immersive {
 }
 
 @media (max-width: 768px) {
-  body.immersive {
-    background: #000;
-  }
-
   body.immersive #reader {
     max-width: 100%;
     margin: 0;
@@ -331,7 +330,7 @@ body.immersive {
     max-width: 100%;
     padding: 16px 12px;
     border-radius: 0;
-    background: transparent;  
+    background: transparent;
   }
 
   body.immersive #exit-immersive {
@@ -369,27 +368,9 @@ body.immersive {
     line-height: 1.6;
   }
 
-  .reader,
-  .container {
-    padding: 24px 16px;
-    max-width: 100%;
-  }
-
   #reader,
   .reader {
     font-size: 1.25rem;
-  }
-
-  #reader h1,
-  .reader h1 {
-    font-size: 2.2rem;
-    line-height: 1.2;
-    margin-bottom: 24px;
-  }
-
-  .content p {
-    font-size: 1.25rem;
-    line-height: 1.8;
   }
 
   .navbar {
@@ -445,11 +426,6 @@ body.immersive {
     display: none;
   }
 
-  .reader,
-  .container {
-    padding: 18px 12px;
-  }
-
   #reader h1,
   .reader h1 {
     font-size: 2.3rem;
@@ -466,13 +442,11 @@ body.immersive {
     margin-top: 18px;
   }
 
-  .chapter-nav a {
-    font-size: 1.15rem;
-  }
-
   .reader,
   .container {
-    background: rgba(15, 17, 21, 0.95);
+    max-width: 100%;
+    padding: 18px 12px;
+    background: var(--surface);
     border-radius: 10px;
   }
 }
@@ -501,7 +475,7 @@ body.immersive {
   height: 45px;
   border-radius: 50%;
   border: 1px solid var(--border);
-  background: rgba(15, 17, 21, 0.95);
+  background: var(--surface);
   color: var(--text-body);
   display: flex;
   align-items: center;
@@ -517,7 +491,7 @@ body.immersive {
   left: 12px;
   width: 280px;
   max-height: 60vh;
-  background: rgba(15, 17, 21, 0.92);
+  background: var(--surface-panel);
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 12px;
@@ -577,7 +551,7 @@ body.immersive {
 .comments-section {
   margin-top: 48px;
   padding: 18px;
-  background: rgba(20, 24, 30, 0.96);
+  background: var(--surface-comments);
   border: 1px solid var(--border);
   border-radius: 8px;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.38);
@@ -614,6 +588,12 @@ body.immersive .comments-section {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .comments-section {
+    animation: none;
   }
 }
 

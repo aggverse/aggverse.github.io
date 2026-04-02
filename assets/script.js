@@ -1,9 +1,25 @@
-window.addEventListener("scroll", () => {
-  const winScroll = document.documentElement.scrollTop;
-  const height =
-    document.documentElement.scrollHeight -
-    document.documentElement.clientHeight;
+if (typeof window.updateScrollProgress === "function") {
+  window.updateScrollProgress();
+} else {
+  const progressBar = document.getElementById("progress-bar");
+  const docEl = document.documentElement;
 
-  const scrolled = (winScroll / height) * 100;
-  document.getElementById("progress-bar").style.width = scrolled + "%";
-});
+  function updateScrollProgress() {
+    if (!progressBar) return;
+
+    const scrollTop = docEl.scrollTop;
+    const scrollableHeight = docEl.scrollHeight - docEl.clientHeight;
+
+    if (scrollableHeight <= 0) {
+      progressBar.style.width = "0%";
+      return;
+    }
+
+    const progress = Math.min(100, Math.max(0, (scrollTop / scrollableHeight) * 100));
+    progressBar.style.width = `${progress}%`;
+  }
+
+  window.updateScrollProgress = updateScrollProgress;
+  window.addEventListener("scroll", updateScrollProgress, { passive: true });
+  updateScrollProgress();
+}
